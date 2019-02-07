@@ -1,28 +1,88 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import NewTodo from './Todo'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+class Todo extends React.Component{
+  state = {
+    Todo:"",
+    Todos: [],
+    DoneTodos: []
+   
+  }
+
+  makeTodo = (Todo) => {
+    this.setState ({
+      Todo : Todo
+    })
+  }
+
+  completedTodo = () => {
+    this.setState((prevState) => ({
+      DoneTodos: [...prevState.DoneTodos, {
+        DoneTodos: prevState.completedTodo
+      }]
+
+    }))
+  }
+
+  
+  formSubmit = (event) => {
+    event.preventDefault();
+    this.setState((prevState) => ({
+      
+      Todos: [...prevState.Todos,{
+      Todo: prevState.Todo,
+      
+    }]
+    }))
+  }
+
+  completedSubmit = (Todo) => {
+  
+    this.setState((prevState) => ({
+     DoneTodos: [...prevState.Todos.filter((todo) => {
+         return todo === Todo
+       })
+     ]
+    }))
+  }
+
+  DeleteTodo = (Todos) => {
+    this.setState((prevState) => ({
+      Todos: prevState.Todos.filter((Todos) => {
+        return Todos.Todo !== Todo
+      })
+    }))
+  }
+  render(){
+    
+    return(
+      <div>
+        <form onSubmit={this.formSubmit}>
+          <input type ="text" placeholder ="Todo" 
+      onChange ={(event) => this.makeTodo(event.target.value)}
+       value ={this.state.Todo}></input>
+         
+        <button type="submit">Submit</button>
+        </form>
+
+        {this.state.Todos.map((Todo, index) => (
+        <div key ={index}><NewTodo info={Todo}/>
+         <button onClick={()=>this.completedSubmit(Todo)}>Submit</button>
+         <button onClick={()=>this.DeleteTodo(NewTodo)}>Delete</button>
+        </div>))}
+        
+        
+        {this.state.DoneTodos.map((DoneTodo, index) => (
+        <div key ={index}><NewTodo info={DoneTodo}/>
+       
+       
+        
+        
+        </div>))}
+        </div>
+
+    )
   }
 }
 
-export default App;
+export default Todo
